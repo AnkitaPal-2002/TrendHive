@@ -1,6 +1,7 @@
 import  React, { lazy, Suspense} from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
+import {Toaster} from "sonner";
 
 const UserLayout = lazy(()=>import("./components/layout/UserLayout")) 
 
@@ -10,6 +11,7 @@ const App = () => {
     <>
       
       <Router>
+        <Toaster position="top-right"/>
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>
           <Route path="/" element={<UserLayout/>}>

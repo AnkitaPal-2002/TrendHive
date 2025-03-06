@@ -1,5 +1,5 @@
 import React from 'react'
-import { ShoppingBag, Instagram, Twitter } from 'lucide-react';
+import { ShoppingBag, Instagram, Twitter, Store } from 'lucide-react';
 
 const Topbar = () => {
   return (
@@ -10,7 +10,7 @@ const Topbar = () => {
           {/* Left - Social Icons */}
           <div className='hidden md:flex items-center space-x-4'>
             <a href="#" className='hover:text-gray-300'>
-              <ShoppingBag size={16} strokeWidth={1} className='h-4 w-4' />
+              <Store size={16} strokeWidth={1} className='h-4 w-4' />
             </a>
             <a href="#" className='hover:text-gray-300'>
               <Instagram size={16} strokeWidth={1} className='h-4 w-4' />
