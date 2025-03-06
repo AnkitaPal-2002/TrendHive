@@ -1,6 +1,7 @@
 import  React, { lazy, Suspense} from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
+import Login from './pages/Login'
 import {Toaster} from "sonner";
 
 const UserLayout = lazy(()=>import("./components/layout/UserLayout")) 
@@ -16,6 +17,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<UserLayout/>}>
             <Route index element={<Home/>}/>
+            <Route path="login" element={<Login/>}/>
           </Route>
           {/* User Layout */}
           {/* Home */}
