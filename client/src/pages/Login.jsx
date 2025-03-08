@@ -1,24 +1,40 @@
 import React, { useState } from "react";
-import login from "../assets/login.webp";
+import {useForm} from "react-hook-form";
+import {z} from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import loginImg from "../assets/login.webp";
 import { Link } from "react-router-dom";
 
+    // Validation Schema with Required Fields
+    const loginSchema = z.object({
+        email: z.string().nonempty("Email is required").email("Invalid email address"),
+        password: z.string().nonempty("Password is required").min(6, "Password must be at least 6 characters"),
+    });
+
+    
+
 const Login = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log("User registered: ", { email, password });
-        
-        // Handle form submission
+    const {
+        register : login,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
+        resolver: zodResolver(loginSchema),
+    });
+    
 
-    }
+    
+    const onSubmit = (data) => {
+        console.log("User logged in:", data);
+        // Handle form submission logic here
+    };
 
     return (
         <div className="flex min-h-screen bg-gray-100">
             {/* Left Section - Form */}
             <div className="w-1/2 flex justify-center items-center bg-white p-12 shadow-lg">
-                <form onSubmit={handleSubmit} className="w-full max-w-md">
+                <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md">
                     {/* Brand Logo */}
                     <div className="flex justify-center mb-6">
                         <h2 className="text-3xl font-bold text-gray-900">TrendHive</h2>
@@ -38,11 +54,12 @@ const Login = () => {
                         </label>
                         <input
                             type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            {...login("email")}
+                            
                             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                             placeholder="Enter your email"
                         />
+                        {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
                     </div>
 
                     {/* Password Input */}
@@ -52,11 +69,12 @@ const Login = () => {
                         </label>
                         <input
                             type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            {...login("password")}
+                            
                             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                             placeholder="Enter your password"
                         />
+                        {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
                     </div>
 
                     {/* Sign In Button */}
@@ -85,7 +103,7 @@ const Login = () => {
             {/* Right Section - Image */}
             <div className="w-1/2 flex items-center justify-center bg-gray-800">
                 <img
-                    src={login}
+                    src={loginImg}
                     alt="Login Illustration"
                     className="h-full w-full object-cover"
                 />
