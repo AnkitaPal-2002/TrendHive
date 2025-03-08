@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import login from "../assets/login.webp";
+import register from "../assets/register.webp";
 import { Link } from "react-router-dom";
 
-const Login = () => {
+const Register = () => {
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("User registered: ", { email, password });
+        console.log("User registered: ", { name, email, password });
         
         // Handle form submission
 
@@ -30,6 +31,20 @@ const Login = () => {
                     <p className="text-center text-gray-600 mb-6">
                         Please enter your details to sign in.
                     </p>
+
+                    {/* Name Input */}
+                    <div className="mb-4">
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            Name:
+                        </label>
+                        <input
+                            type="text"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                            placeholder="Enter your name"
+                        />
+                    </div>
 
                     {/* Email Input */}
                     <div className="mb-4">
@@ -64,7 +79,7 @@ const Login = () => {
                         type="submit"
                         className="w-full bg-blue-600 text-white p-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300"
                     >
-                        Sign In
+                        Sign Up
                     </button>
 
                     {/* Forgot Password & Register Link */}
@@ -85,8 +100,8 @@ const Login = () => {
             {/* Right Section - Image */}
             <div className="w-1/2 flex items-center justify-center bg-gray-800">
                 <img
-                    src={login}
-                    alt="Login Illustration"
+                    src={register}
+                    alt="Register Illustration"
                     className="h-full w-full object-cover"
                 />
             </div>
@@ -94,4 +109,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default Register;
