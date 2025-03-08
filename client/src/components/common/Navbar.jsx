@@ -19,7 +19,8 @@ const Navbar = () => {
 
     return (
         <>
-            <nav>
+            <nav className="relative z-50 bg-white shadow-md">
+
                 <div className='container mx-auto flex items-center justify-between py-4 px-6'>
 
                     {/* Left - Logo */}
@@ -31,7 +32,7 @@ const Navbar = () => {
 
                     {/* Center - Navigation Links */}
                     <div className='flex-grow flex justify-center space-x-6'>
-                        <Link to="#" className='text-black hover:text-gray-300 text-sm font-medium uppercase'>
+                        <Link to="/collections/all" className='text-black hover:text-gray-300 text-sm font-medium uppercase'>
                             Men
                         </Link>
                         <Link to="#" className='text-black hover:text-gray-300 text-sm font-medium uppercase'>
