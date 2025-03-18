@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 const FilterSideBar = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+
   const [selectedColor, setSelectedColor] = useState(""); // Track selected color
   const [price, setPrice] = useState(0); // Track price
 
@@ -56,26 +58,48 @@ const FilterSideBar = () => {
         max: parseInt(params.maxPrice) || 100,
       },
     });
+    // console.log("Search Params:", params.toString());
   }, [searchParams]);
 
   const handleFilterChange = (e) => {
     const { name, value, checked, type } = e.target;
-    console.log({ name, value, checked, type });
-
+  
+    let updatedParams = { ...Object.fromEntries([...searchParams]) };
+  
     if (type === "radio") {
-      setSearchParams({ ...Object.fromEntries([...searchParams]), [name]: value });
+      updatedParams[name] = value;
     }
-
+  
     if (type === "checkbox") {
-      setFilter((prev) => {
-        const newValues = checked
-          ? [...prev[name], value]
-          : prev[name].filter((item) => item !== value);
-
-        return { ...prev, [name]: newValues };
-      });
+      let updatedValues = filter[name] ? [...filter[name]] : [];
+      
+      if (checked) {
+        updatedValues.push(value);
+      } else {
+        updatedValues = updatedValues.filter((item) => item !== value);
+      }
+  
+      updatedParams[name] = updatedValues.length ? updatedValues.join(",") : null;
+  
+      setFilter((prev) => ({
+        ...prev,
+        [name]: updatedValues
+      }));
+    } else {
+      setFilter((prev) => ({
+        ...prev,
+        [name]: value
+      }));
     }
+  
+    Object.keys(updatedParams).forEach((key) => {
+      if (!updatedParams[key]) delete updatedParams[key];
+    });
+  
+    setSearchParams(updatedParams);
   };
+  
+  
 
   const handleColorSelect = (color) => {
     setSelectedColor(color);
@@ -94,6 +118,25 @@ const FilterSideBar = () => {
   useEffect(() => {
     console.log("Selected Price:", price);
   }, [price]);
+
+  const updateURLParams = (newValues) => {
+    const params = new URLSearchParams();
+  
+    Object.keys(newValues).forEach((key) => {
+      if (Array.isArray(newValues[key]) && newValues[key].length > 0) {
+        params.set(key, newValues[key].join(","));
+      } else if (newValues[key]) {
+        params.set(key, newValues[key]);
+      }
+    });
+  
+    if (newValues.price) {
+      params.set("minPrice", newValues.price);
+    }
+  
+    setSearchParams(params);
+    navigate(`?${params.toString()}`);
+  };
 
   return (
     <div className="p-4">
@@ -140,9 +183,8 @@ const FilterSideBar = () => {
           {colors.map(({ name, hex }) => (
             <div
               key={name}
-              className={`w-8 h-8 rounded-full cursor-pointer border-2 transition ${
-                selectedColor === name ? "border-black scale-110" : "border-transparent"
-              }`}
+              className={`w-8 h-8 rounded-full cursor-pointer border-2 transition ${selectedColor === name ? "border-black scale-110" : "border-transparent"
+                }`}
               style={{ backgroundColor: hex }}
               onClick={() => handleColorSelect(name)}
             ></div>
