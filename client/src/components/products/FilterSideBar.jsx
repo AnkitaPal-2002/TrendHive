@@ -7,6 +7,8 @@ const FilterSideBar = () => {
 
   const [selectedColor, setSelectedColor] = useState(""); // Track selected color
   const [price, setPrice] = useState(0); // Track price
+  const [priceRange, setPriceRange] = useState([]); 
+  const [debouncedPrice, setDebouncedPrice] = useState();
 
   const [filter, setFilter] = useState({
     category: "",
@@ -44,6 +46,8 @@ const FilterSideBar = () => {
   const brands = ["Adidas", "Puma", "Reebok", "Nike", "Vans", "New Balance"];
   const gender = ["Male", "Female", "Other"];
 
+  
+
   useEffect(() => {
     const params = Object.fromEntries([...searchParams]);
     setFilter({
@@ -54,8 +58,8 @@ const FilterSideBar = () => {
       material: params.material ? params.material.split(",") : [],
       brand: params.brand ? params.brand.split(",") : [],
       priceRange: {
-        min: parseInt(params.minPrice) || 0,
-        max: parseInt(params.maxPrice) || 100,
+        min: parseInt(params.min) || 0,
+        max: parseInt(params.max) || 100,
       },
     });
     // console.log("Search Params:", params.toString());
@@ -91,6 +95,8 @@ const FilterSideBar = () => {
         [name]: value
       }));
     }
+
+    
   
     Object.keys(updatedParams).forEach((key) => {
       if (!updatedParams[key]) delete updatedParams[key];
@@ -109,34 +115,47 @@ const FilterSideBar = () => {
 
   useEffect(() => {
     console.log("Updated Filter:", filter);
-  }, [filter]);
+  }, [filter, setFilter]);
 
-  useEffect(() => {
-    console.log("Selected Color:", selectedColor);
-  }, [selectedColor]);
 
-  useEffect(() => {
-    console.log("Selected Price:", price);
-  }, [price]);
+  // const updateURLParams = (newValues) => {
+  //   const params = new URLSearchParams();
+  
+  //   Object.keys(newValues).forEach((key) => {
+  //     if (Array.isArray(newValues[key]) && newValues[key].length > 0) {
+  //       params.set(key, newValues[key].join(","));
+  //     } else if (newValues[key]) {
+  //       params.set(key, newValues[key]);
+  //     }
+  //   });
+  
+  //   if (newValues.price) {
+  //     params.set("minPrice", newValues.price);
+  //   }
+  
+  //   setSearchParams(params);
+  //   navigate(`?${params.toString()}`);
+  // };
 
-  const updateURLParams = (newValues) => {
-    const params = new URLSearchParams();
-  
-    Object.keys(newValues).forEach((key) => {
-      if (Array.isArray(newValues[key]) && newValues[key].length > 0) {
-        params.set(key, newValues[key].join(","));
-      } else if (newValues[key]) {
-        params.set(key, newValues[key]);
-      }
-    });
-  
-    if (newValues.price) {
-      params.set("minPrice", newValues.price);
-    }
-  
-    setSearchParams(params);
-    navigate(`?${params.toString()}`);
+  const handlePriceChange = (e) => {
+    const newPrice = e.target.value;
+    setPrice(newPrice);
   };
+
+  // Debounce logic for URL update
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedPrice(price);
+      const updatedParams = {
+        ...Object.fromEntries([...searchParams]),
+        min: 0,
+        max: price,
+      };
+      setSearchParams(updatedParams);
+    }, 500); // Debounce delay
+
+    return () => clearTimeout(timer); // Cleanup
+  }, [price]);
 
   return (
     <div className="p-4">
@@ -243,7 +262,8 @@ const FilterSideBar = () => {
             value={price}
             onChange={(e) => {
               setPrice(e.target.value);
-              console.log("Selected Price:", e.target.value);
+              // console.log("Selected Price:", e.target.value);
+              handlePriceChange(e);
             }}
             className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer transition focus:ring focus:ring-blue-600"
           />
