@@ -6,6 +6,8 @@ import Register from './pages/Register'
 import Profile from './pages/Profile'
 import {Toaster} from "sonner";
 import CollectionPage from './pages/CollectionPage'
+import ProductDetails from './components/products/ProductDetails'
+import CheckOut from './components/cart/CheckOut'
 
 const UserLayout = lazy(()=>import("./components/layout/UserLayout")) 
 
@@ -24,6 +26,9 @@ const App = () => {
             <Route path="register" element={<Register/>}/>
             <Route path="profile" element={<Profile/>}/>
             <Route path="collections/:collection" element={<CollectionPage/>} />
+            <Route path='product/:id' element={<ProductDetails/>}/>
+            <Route path='checkout' element={<CheckOut/>}/>
+            
           </Route>
           {/* User Layout */}
           {/* Home */}

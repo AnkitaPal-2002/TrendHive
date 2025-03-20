@@ -1,10 +1,18 @@
 import React, {useState} from 'react'
+import {useNavigate} from 'react-router-dom';
 import { X } from "lucide-react";
 import CartContents from './CartContents';
 
 
 
 const CartDrawer = ({drawarOpen, toggleCartDrawer }) => {
+    const navigate = useNavigate();
+
+
+    const handleCheckOut = () => {
+        // Add logic to checkout
+        navigate('/checkout');
+    }
     
     return (
         <div className={`fixed top-0 right-0 w-3/4 sm:w-1/2 md:[30rem] h-full bg-white shadow-lg transform flex flex-col z-50 transition-all duration-300 ${ drawarOpen ? 'translate-x-0' : 'translate-x-full'}`}>
@@ -26,7 +34,10 @@ const CartDrawer = ({drawarOpen, toggleCartDrawer }) => {
 
             {/* Checkout button fixed at the bottom */}
             <div className='p-4 bg-white sticky bottom-0'>
-                <button className='w-full bg-orange-700 text-white py-3 rounded-lg font-semibold hover:bg-orange-800 transition'>
+                <button 
+                className='w-full bg-orange-700 text-white py-3 rounded-lg font-semibold hover:bg-orange-800 transition'
+                onClick={handleCheckOut}
+                >
                     Checkout
                 </button>
                 <p className='text-sm tracking-tighter text-gray-500 mt-2 text-center'>
