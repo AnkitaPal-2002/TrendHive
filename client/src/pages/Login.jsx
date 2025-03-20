@@ -1,33 +1,31 @@
 import React, { useState } from "react";
-import {useForm} from "react-hook-form";
-import {z} from "zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import loginImg from "../assets/login.webp";
 import { Link } from "react-router-dom";
+import { FcGoogle } from "react-icons/fc"; // Google Icon
 
-    // Validation Schema with Required Fields
-    const loginSchema = z.object({
-        email: z.string().nonempty("Email is required").email("Invalid email address"),
-        password: z.string().nonempty("Password is required").min(6, "Password must be at least 6 characters"),
-    });
-
-    
+const loginSchema = z.object({
+    email: z.string().nonempty("Email is required").email("Invalid email address"),
+    password: z.string().nonempty("Password is required").min(6, "Password must be at least 6 characters"),
+});
 
 const Login = () => {
-
     const {
-        register : login,
+        register: login,
         handleSubmit,
         formState: { errors },
     } = useForm({
         resolver: zodResolver(loginSchema),
     });
-    
 
-    
     const onSubmit = (data) => {
         console.log("User logged in:", data);
-        // Handle form submission logic here
+    };
+
+    const handleGoogleLogin = () => {
+        window.location.href = "http://localhost:3000/auth/google"; // Example Google OAuth URL
     };
 
     return (
@@ -35,7 +33,6 @@ const Login = () => {
             {/* Left Section - Form */}
             <div className="w-1/2 flex justify-center items-center bg-white p-12 shadow-lg">
                 <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md">
-                    {/* Brand Logo */}
                     <div className="flex justify-center mb-6">
                         <h2 className="text-3xl font-bold text-gray-900">TrendHive</h2>
                     </div>
@@ -55,7 +52,6 @@ const Login = () => {
                         <input
                             type="email"
                             {...login("email")}
-                            
                             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                             placeholder="Enter your email"
                         />
@@ -70,7 +66,6 @@ const Login = () => {
                         <input
                             type="password"
                             {...login("password")}
-                            
                             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                             placeholder="Enter your password"
                         />
@@ -85,14 +80,23 @@ const Login = () => {
                         Sign In
                     </button>
 
-                    {/* Forgot Password & Register Link */}
+                    {/* Google Login Button */}
+                    <button
+                        type="button"
+                        onClick={handleGoogleLogin}
+                        className="mt-4 w-full flex items-center justify-center gap-2 border border-gray-300 p-3 rounded-lg hover:bg-gray-200 transition duration-300"
+                    >
+                        <FcGoogle className="text-2xl" />
+                        Sign in with Google
+                    </button>
+
                     <div className="mt-6 text-center text-sm text-gray-600">
                         <Link to="/forgot-password" className="text-blue-500 hover:underline">
                             Forgot Password?
                         </Link>
                     </div>
                     <p className="mt-4 text-center text-sm text-gray-600">
-                        Don't have an account?{" "}
+                        Don't have an account? {" "}
                         <Link to="/register" className="text-blue-500 hover:underline">
                             Register here
                         </Link>
