@@ -1,13 +1,22 @@
 import express from 'express';
+import cors from 'cors';
 import path from 'path';
 import dotenv from 'dotenv';
 import session from 'express-session';
 import { OAuth2Client } from 'google-auth-library';
 
+
+
 dotenv.config();
 
 const app = express();
 const __dirname = path.resolve(); 
+
+app.use(express.json());
+app.use(cors());
+
+
+
 
 const client = new OAuth2Client({
     clientId: process.env.GOOGLE_CLIENT_ID,

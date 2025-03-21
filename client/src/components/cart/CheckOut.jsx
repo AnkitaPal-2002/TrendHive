@@ -2,6 +2,7 @@ import React,{useState} from 'react'
 import { useNavigate } from 'react-router-dom';
 import {toast} from 'sonner'
 import PayPalButton from './PayPalButton';
+import { PayPalButtons } from '@paypal/react-paypal-js';
 
 
 const cart = [
@@ -185,8 +186,8 @@ const CheckOut = () => {
                                     Pay with Paypal
                                 </h3>
                                 {/* Paypal Componenet */}
-                                <PayPalButton 
-                                amount={total.toFixed(2)} 
+                                <PayPalButton
+                                amount={100.00} 
                                 onSuccess={handlePaymentSuccess}
                                 onError={handlePaymentError}
                                 />
