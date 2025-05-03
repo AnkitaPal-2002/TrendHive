@@ -9,7 +9,7 @@ import { Toaster } from "sonner";
 import CollectionPage from './pages/CollectionPage'
 import ProductDetails from './components/products/ProductDetails'
 import CheckOut from './components/cart/CheckOut'
-import OrderConfirmation from './components/cart/OrderConfirmation'
+import OrderConfirmation from './pages/OrderConfirmationPage'
 
 const UserLayout = lazy(() => import("./components/layout/UserLayout"))
 

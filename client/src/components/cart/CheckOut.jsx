@@ -2,13 +2,15 @@ import React,{useState} from 'react'
 import { useNavigate } from 'react-router-dom';
 import {toast} from 'sonner'
 import PayPalButton from './PayPalButton';
-import { PayPalButtons } from '@paypal/react-paypal-js';
+
 
 
 const cart = [
-    { id: 1, name: "Wireless Headphones", price: 1999, quantity: 2 },
-    { id: 2, name: "Smartphone Case", price: 499, quantity: 1 },
-    { id: 3, name: "Bluetooth Speaker", price: 2999, quantity: 1 }
+    { id: 1, name: "Wireless Headphones", price: 1999, quantity: 2, image: "https://picsum.photos/seed/headphones/64" },
+    { id: 2, name: "Smartphone Case", price: 499, quantity: 1, image: "https://picsum.photos/seed/case/64" },
+    { id: 3, name: "Bluetooth Speaker", price: 2999, quantity: 1, image: "https://picsum.photos/seed/speaker/64" },
+    { id: 4, name: "Smartwatch", price: 5999, quantity: 1, image: "https://picsum.photos/seed/smartwatch/64" },
+    { id: 5, name: "Laptop Stand", price: 1499, quantity: 1, image: "https://picsum.photos/seed/laptopstand/64" },
 ];
 
 const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -187,7 +189,7 @@ const CheckOut = () => {
                                 </h3>
                                 {/* Paypal Componenet */}
                                 <PayPalButton
-                                amount={100.00} 
+                                amount={1000.00} 
                                 onSuccess={handlePaymentSuccess}
                                 onError={handlePaymentError}
                                 />
@@ -198,6 +200,43 @@ const CheckOut = () => {
                 </div>
             </form>
 
+        </div>
+        {/* Right Section */}
+        <div className='bg-gray-50 p-6 rounded-lg'>
+            <h3 className='text-lg mb-4'>
+                    Order Summary
+            </h3>
+            <div className='border-t py-4 mb-4'>
+                {
+                    cart.map((product, index) => (
+                        <div key={index} className='flex items-start justify-between py-2 border-b'>
+                            <div className='flex items-center'>
+                                <img src={product.image} alt={product.name} className='w-16 h-16 mr-4' />
+                                <div>
+                                    <h4 className='text-lg font-semibold'>{product.name}</h4>
+                                    <p className='text-gray-600'>₹{product.price}</p>
+                                    <p className='text-gray-600'>Qty: {product.quantity}</p>
+                                </div>
+                            </div>
+                            <p className='text-lg font-semibold'>₹{product.price * product.quantity}</p>
+                        </div>
+                    ))
+
+                }
+
+            </div>
+            <div className='flex items-center justify-between py-2 border-b'>
+                <h4 className='text-lg font-semibold'>Subtotal</h4>
+                <p className='text-lg font-semibold'>₹{total}</p>
+            </div>
+            <div className='flex items-center justify-between py-2 border-b'>
+                <h4 className='text-lg font-semibold'>Shipping</h4>
+                <p className='text-lg font-semibold'>Free</p>
+            </div>
+            <div className='flex items-center justify-between py-2 border-b'>
+                <h4 className='text-lg font-semibold'>Total</h4>
+                <p className='text-lg font-semibold'>₹{total}</p>
+            </div>
         </div>
       
     </div>
